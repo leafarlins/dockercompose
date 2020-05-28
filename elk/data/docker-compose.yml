@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  logstash:
+    image: logstash:7.5.2
+    container_name: "logstash"
+    restart: on-failure:5
+    ports:
+      - 5044:5044
+      - 9600:9600
+    volumes:
+      - "./pipeline/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:z"
+      - "./covid19.csv:/usr/share/logstash/covid19.csv:z"
+    environment:
+      XPACK_MONITORING_ENABLED: "true"
+      XPACK_MONITORING_ELASTICSEARCH_HOSTS: ${ES_HOST}:9200
+      XPACK_MONITORING_ELASTICSEARCH_USERNAME: "logstash_system"
+      XPACK_MONITORING_ELASTICSEARCH_PASSWORD: "${PWD_LS_MON}"
+      ES_HOST: ${ES_HOST}
+      ES_USER: "elastic"
+      ES_PWD: ${ES_PWD}
+      LOG_LEVEL: debug
+      #PATH_CONFIG: /usr/share/logstash/pipeline
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9600"]
+      interval: 3m
+      timeout: 30s
+      retries: 2
+      start_period: 3m

@@ -1,0 +1,30 @@
+version: '3.4'
+
+services:
+
+  elasticsearch:
+    image: elasticsearch:7.5.2
+    container_name: elasticsearch
+    environment:
+      node.name: elasticsearch
+      discovery.type: "single-node"
+      bootstrap.memory_lock: "true"
+      xpack.security.enabled: "true"
+      xpack.security.transport.ssl.enabled: "true"
+      xpack.monitoring.enabled: "true"
+      xpack.monitoring.collection.enabled: "true"
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdatasn:/usr/share/elasticsearch/data
+      - "./elastic-certificates.p12:/usr/share/elasticsearch/elastic-certificates.p12"
+      - "./elastic-stack-ca.p12:/usr/share/elasticsearch/elastic-stack-ca.p12"
+    ports:
+      - ${ESIP}:9200:9200
+
+volumes:
+  esdatasn:
+    driver: local

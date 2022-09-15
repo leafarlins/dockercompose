@@ -6,12 +6,14 @@ services:
         ports: ["27017:27017"]
         # If you need to connect to your db from outside this container
         #network_mode: host
+        #user: "0"
         environment:
           MONGO_INITDB_ROOT_USERNAME: root
-          MONGO_INITDB_ROOT_PASSWORD: rieGh1Ah7Thahch1
+          MONGO_INITDB_ROOT_PASSWORD: ${ROOT_PWD}
         volumes:
-          - "./data/db:/data/db"
-          - "./data/configdb:/data/configdb"
+          #- "./data/db:/data/db"
+          #- "./data/configdb:/data/configdb"
+          - "./data:/data"
         #  - "./mongo-entrypoint/:/docker-entrypoint-initdb.d/"
         #command:
         #  - mongod

@@ -21,3 +21,7 @@ use myFirstDatabase
 db.createUser({ user: "mongouser" , pwd: "mongopass", roles: [ { role: "readWrite", db: "myFirstDatabase"} ], passwordDigestor: "server"})
 ```
 
+Create the mongodb volume on docker
+```sh
+docker volume create --name=mongodata
+```
